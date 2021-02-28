@@ -4,7 +4,12 @@ const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
   host: '/',
   path:'/peerserver',
-  port: '3000'
+  port: '3000',
+  headers :{
+    "Host":"headers-inspect.com",
+    "Connection":"keep-alive, Upgrade",
+    "Upgrade":"websocket"
+  },
 })
 
 
@@ -33,8 +38,7 @@ navigator.mediaDevices.getUserMedia({
   addVideoStream(myVideo, stream)
 
   myPeer.on('call', (call) => {
-    
-
+  
     call.answer(stream);
     
     const video = document.createElement('video')
@@ -80,8 +84,6 @@ const connectToNewUser=(userId, stream)=>{
 
   const call = myPeer.call(userId, stream)
 
-  callend=call;
-
   const video = document.createElement('video')
   
 
@@ -103,8 +105,9 @@ function addVideoStream(video, stream) {
   video.addEventListener('loadedmetadata', () => {
     video.play()
   })
-  
-  videoGrid.append(video);
+ 
+  videoGrid.append(video)
+ 
 }
 
 const leave=()=>{

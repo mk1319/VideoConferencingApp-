@@ -1,11 +1,11 @@
-#video-grid {
-    display: flex;
-  }
-  
+
   video {
     margin:5px;
     width:200px;
     height:200px;
+  }
+  #name{
+    margin-top:20px;
   }
 
   html{
