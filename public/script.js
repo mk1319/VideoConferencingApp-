@@ -5,21 +5,17 @@ const myPeer = new Peer(undefined, {
   host: '/',
   path:'/peerserver',
   port: '3000',
-  headers :{
-    "Host":"headers-inspect.com",
-    "Connection":"keep-alive, Upgrade",
-    "Upgrade":"websocket"
-  },
 })
 
 
 let Videocontroller;
 let callend;
 
+let Name=prompt('Enter Name:-');
 const myVideo = document.createElement('video')
 myVideo.muted = true
 const peers = {}
-peers.name=prompt("Enter Your Name:-");
+// peers.name=prompt("Enter Your Name:-");
 
 
 var getUserMedia =
@@ -31,7 +27,7 @@ var getUserMedia =
 
 navigator.mediaDevices.getUserMedia({
   video: true,
-  audio: true
+  audio: false
 }).then(stream => {
   Videocontroller=stream
 
@@ -76,8 +72,10 @@ socket.on('user-disconnected', userId => {
   if (peers[userId]) peers[userId].close();
 })
 
-myPeer.on('open', (id) => {
-  socket.emit('join-room', ROOM_ID, id)
+myPeer.on('open', (id,name) => {
+
+  socket.emit('join-room', ROOM_ID, id,name)
+
 })
 
 const connectToNewUser=(userId, stream)=>{
@@ -105,13 +103,11 @@ function addVideoStream(video, stream) {
   video.addEventListener('loadedmetadata', () => {
     video.play()
   })
- 
-  videoGrid.append(video)
- 
+  videoGrid.append(video); 
 }
 
 const leave=()=>{
-  
+  window.location.reload();
 }
 
 
@@ -169,7 +165,8 @@ const messageInput = document.getElementById('message-input')
 
 
 
-socket.emit('new-user', peers.name)
+
+socket.emit('new-user', name=Name)
 
 
 socket.on('chat-message', data => {
@@ -197,3 +194,7 @@ function appendMessage(message) {
   messageElement.innerText = message
   messageContainer.append(messageElement)
 }
+
+
+
+/* Rectangle 4 */
